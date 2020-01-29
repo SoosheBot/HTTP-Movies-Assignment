@@ -9,7 +9,7 @@ const defaultInfo = {
     stars: [],
 }
 
-const UpdateMovie = (props) => {
+const UpdateMovies = (props) => {
     const [movie, setMovie] = useState(defaultInfo);
     const { id } = useParams();
 
@@ -21,7 +21,7 @@ const UpdateMovie = (props) => {
         if (movieToEdit) setMovie(movieToEdit);
       }, [props.movies, id]);
 
-      const changeHandler = ev => {
+      const handleChange = ev => {
         ev.persist();
         let value = ev.target.value;
         if (ev.target.name === "metascore") {
@@ -53,7 +53,19 @@ const UpdateMovie = (props) => {
         .catch(err => console.log(err.response));
     };
 
-    
+    return (
+        <div>
+            <h1>Update Form</h1>
+            <form onSubmit={handleSubmit}>
+                <input type='text' name='title' value={movie.title} onChange={handleChange} placeholder='Update title'/>
+                <input type="text" name="director" onChange={handleChange} value={movie.director} placeholder="director"/>
+                <input type="number" name="metascore" onChange={handleChange} value={movie.metascore} placeholder=""/>
+                <input type="text" name="stars" onChange={handleChange} value={movie.stars} placeholder="stars"/>
+                <button>Edit</button>
+            </form>
+        </div>
+    )
+
 };
 
-export default UpdateMovie;
+export default UpdateMovies;
