@@ -1,6 +1,7 @@
 import React from "react";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 import MovieCard from "./MovieCard";
+// import UpdateMovies from "./UpdateMovies";
 
 
 export default class Movie extends React.Component {
@@ -44,6 +45,7 @@ export default class Movie extends React.Component {
         <div className="save-button" onClick={this.saveMovie}>
           Save
         </div>
+        <button onClick={this.state.movie.updateMovies}>Update</button>
       </div>
     );
   }
