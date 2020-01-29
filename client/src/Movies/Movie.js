@@ -1,6 +1,8 @@
 import React from "react";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 import MovieCard from "./MovieCard";
+
+
 export default class Movie extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +23,7 @@ export default class Movie extends React.Component {
 
   fetchMovie = id => {
     axiosWithAuth()
-      .get(`http://localhost:5000/api/movies/${id}`)
+      .get(`/api/movies/${id}`)
       .then(res => this.setState({ movie: res.data }))
       .catch(err => console.log(err.response));
   };
