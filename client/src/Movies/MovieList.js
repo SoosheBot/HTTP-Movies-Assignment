@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { axiosWithAuth } from "../utils/axiosWithAuth";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import MovieCard from "./MovieCard";
 export default class MovieList extends Component {
@@ -11,8 +11,8 @@ export default class MovieList extends Component {
   }
 
   componentDidMount() {
-    axiosWithAuth()
-      .get("/api/movies")
+    axios
+      .get("http://localhost:5000/api/movies")
       .then(res => this.setState({ movies: res.data }))
       .catch(err => console.log(err.response));
   }
