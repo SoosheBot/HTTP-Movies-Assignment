@@ -27,39 +27,50 @@ const App = (props) => {
     setSavedList([...savedList, movie]);
   };
 
-  const updateMovie = (id, item) => {
+  const updateItem = (id, item) => {
     axiosWithAuth()
     .put(`/api/movies/${id}`, item)
     .then(res => {
-      const updatedMovie = res.data;
+      const updatedItem = res.data;
       const newItems = items.map(item => {
-        if (item.id !== updatedMovie.id) {
+        if (item.id !== updatedItem.id) {
           return item;
         }
-        return updatedMovie;
+        return updatedItem;
       })
       setItems(newItems);
       props.history.push('/');
 
     })
     .catch(err => console.log('updateMovie error', err))
-  }
+  };
+
+  const deleteItem = id => {
+    axiosWithAuth()
+    .delete(`/api/movies/${id}`)
+    .then(res => { console.log(res.data)
+      setItems(res.data);
+      props.history.push('/');
+    })
+    .catch(err => console.log(err));
+  };
+
 
   return (
     <>
       <SavedList list={savedList} />
       <Route exact path="/" component={MovieList}/>
+      <Route path='/update-movie/:id' 
+      render={props => {
+        return <UpdateMovies {...props} items={items} updateItem={updateItem} />
+      }}
+    />
       <Route
         path="/movies/:id"
         render={props => {
-          return <Movie {...props} addToSavedList={addToSavedList} />;
+          return <Movie {...props} addToSavedList={addToSavedList} items={items} deleteItem={deleteItem} />;
         }}
       />
-      <Route path='/update-movie/:id' 
-      render={props => {
-        return <UpdateMovies {...props} items={items} updateMovie={updateMovie} />
-      }}
-    />
     </>
   );
 };

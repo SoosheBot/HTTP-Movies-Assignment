@@ -39,17 +39,9 @@ export default class Movie extends React.Component {
   routeToUpdate = e => {
     e.persist();
     e.preventDefault();
-    this.props.history.push(`/update-movie/${this.item.id}`);
+    this.props.history.push(`/update-movie/${this.state.movie.id}`);
   };
 
-  // deleteItem = e => {
-  //   e.preventDefault();
-  //   axiosWithAuth()
-  //   .delete(`/api/movies/${this.state.movie.id}`)
-  //   .then(res => { console.log(res.data)
-  //   })
-  //   .catch(err => console.log(err.response));
-  // };
 
   deleteHandler = e => {
     this.props.deleteItem(this.state.movie.id);

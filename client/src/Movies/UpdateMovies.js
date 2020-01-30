@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+// import { useParams } from 'react-router-dom';
 
 
 const defaultInfo = {
-  id: "",
   title: "",
   director: "",
   metascore: 0,
@@ -11,13 +11,12 @@ const defaultInfo = {
 
 const UpdateMovies = props => {
   const [movie, setMovie] = useState(defaultInfo);
-  //   const { id } = useParams();
+    // const { id } = useParams();
 
   useEffect(() => {
-    const movieToEdit = props.items.find(movie => {
-      return `${movie.id}` === Number(props.match.params.id);
-    });
-
+    const movieToEdit = props.items.find(movie => 
+      `${movie.id}` === props.match.params.id
+    );
     if (movieToEdit) {
       setMovie(movieToEdit);
     }
@@ -26,6 +25,9 @@ const UpdateMovies = props => {
   const handleChange = ev => {
     ev.persist();
     let value = ev.target.value;
+    if (ev.target.name === "metascore") {
+      value = parseInt(value, 10);
+  }
     console.log('handleChange movie is =', movie)
     setMovie({
       ...movie,
@@ -37,8 +39,8 @@ const UpdateMovies = props => {
     console.log("handleSubmit movie is =", movie);
     e.preventDefault();
     const id = Number(props.match.params.id);
-    props.updateMovie(id, movie);
-  
+    props.updateItem(id, movie);
+    props.history.push('/')
   };
 
   return (
@@ -64,7 +66,6 @@ const UpdateMovies = props => {
           name="metascore"
           onChange={handleChange}
           value={movie.metascore}
-        //   placeholder=""
         />
         <input
           type="text"
