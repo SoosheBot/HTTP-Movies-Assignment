@@ -45,7 +45,6 @@ const UpdateMovie = (props) => {
     e.preventDefault();
     const id = Number(props.match.params.id);
     props.updateItem(id, movieInfo);
-
   };
 
     return (
