@@ -7,13 +7,13 @@ import MovieList from "./Movies/MovieList";
 import Movie from "./Movies/Movie";
 import UpdateMovies from './Movies/UpdateMovies';
 
-const App = () => {
+const App = (props) => {
   const [savedList, setSavedList] = useState([]);
   const [items, setItems] = useState([]);
 
 
   useEffect(() => {
-    axios
+    axiosWithAuth()
       .get("/api/movies")
       .then(res => {
         console.log("res.data", res.data)
@@ -27,6 +27,24 @@ const App = () => {
     setSavedList([...savedList, movie]);
   };
 
+  const updateMovie = (id, item) => {
+    axiosWithAuth()
+    .put(`/api/movies/${id}`, item)
+    .then(res => {
+      const updatedMovie = res.data;
+      const newItems = items.map(item => {
+        if (item.id !== updatedMovie.id) {
+          return item;
+        }
+        return updatedMovie;
+      })
+      setItems(newItems);
+      props.history.push('/');
+
+    })
+    .catch(err => console.log('updateMovie error', err))
+  }
+
   return (
     <>
       <SavedList list={savedList} />
@@ -39,7 +57,7 @@ const App = () => {
       />
       <Route path='/update-movie/:id' 
       render={props => {
-        return <UpdateMovies {...props} />
+        return <UpdateMovies {...props} items={items} updateMovie={updateMovie} />
       }}
     />
     </>
