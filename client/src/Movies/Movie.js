@@ -3,7 +3,6 @@ import { axiosWithAuth } from "../utils/axiosWithAuth";
 import MovieCard from "./MovieCard";
 // import UpdateMovies from "./UpdateMovies";
 
-
 export default class Movie extends React.Component {
   constructor(props) {
     super(props);
@@ -37,13 +36,23 @@ export default class Movie extends React.Component {
     addToSavedList(this.state.movie);
   };
 
-  deleteItem = e => {
+  routeToUpdate = e => {
+    e.persist();
     e.preventDefault();
-    axiosWithAuth()
-    .delete(`/api/movies/${this.state.movie.id}`)
-    .then(res => { console.log(res.data)
-    })
-    .catch(err => console.log(err.response));
+    this.props.history.push(`/update-movie/${this.item.id}`);
+  };
+
+  // deleteItem = e => {
+  //   e.preventDefault();
+  //   axiosWithAuth()
+  //   .delete(`/api/movies/${this.state.movie.id}`)
+  //   .then(res => { console.log(res.data)
+  //   })
+  //   .catch(err => console.log(err.response));
+  // };
+
+  deleteHandler = e => {
+    this.props.deleteItem(this.state.movie.id);
   };
 
   render() {
@@ -57,7 +66,8 @@ export default class Movie extends React.Component {
         <div className="save-button" onClick={this.saveMovie}>
           Save
         </div>
-        <button onClick={this.state.movie.updateMovies}>Update</button>
+        <button onClick={this.routeToUpdate}>Edit</button>
+        <button onClick={this.deleteHandler}>Delete</button>
       </div>
     );
   }
