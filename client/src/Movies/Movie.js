@@ -11,6 +11,9 @@ export default class Movie extends React.Component {
       movie: null
     };
   }
+  item = this.props.items.find(
+    thing => `${thing.id}` === this.props.match.params.id
+  );
 
   componentDidMount() {
     this.fetchMovie(this.props.match.params.id);
