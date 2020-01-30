@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useParams } from "react-router-dom";
-import { axiosWithAuth } from "../utils/axiosWithAuth";
+
 
 const defaultInfo = {
   id: "",
@@ -27,9 +26,7 @@ const UpdateMovies = props => {
   const handleChange = ev => {
     ev.persist();
     let value = ev.target.value;
-    if (ev.target.name === "metascore") {
-      value = parseInt(value, 10);
-    }
+    console.log('handleChange movie is =', movie)
     setMovie({
       ...movie,
       [ev.target.name]: value
@@ -37,28 +34,16 @@ const UpdateMovies = props => {
   };
 
   const handleSubmit = e => {
-    console.log("in handlesubmit", movie);
+    console.log("handleSubmit movie is =", movie);
     e.preventDefault();
-    axiosWithAuth()
-      .put(`/api/movies/${movie.id}`, movie)
-      .then(res => {
-        const newList = props.movies.map(item => {
-          if (movie.id === item.id) {
-            return res.data;
-          } else {
-            return item;
-          }
-        });
-        props.setMovies(newList);
-        console.log("newList", newList);
-        props.history.push(`/`);
-      })
-      .catch(err => console.log(err.response));
+    const id = Number(props.match.params.id);
+    props.updateMovie(id, movie);
+  
   };
 
   return (
     <div>
-      <h1>Update Form</h1>
+      <h1>Update</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -79,7 +64,7 @@ const UpdateMovies = props => {
           name="metascore"
           onChange={handleChange}
           value={movie.metascore}
-          placeholder=""
+        //   placeholder=""
         />
         <input
           type="text"
@@ -88,6 +73,7 @@ const UpdateMovies = props => {
           value={movie.stars}
           placeholder="stars"
         />
+        <button type='submit'>Sumbit Changes</button>
       </form>
     </div>
   );

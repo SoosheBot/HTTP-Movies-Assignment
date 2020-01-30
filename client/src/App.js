@@ -9,7 +9,18 @@ import UpdateMovies from './Movies/UpdateMovies';
 
 const App = () => {
   const [savedList, setSavedList] = useState([]);
+  const [items, setItems] = useState([]);
 
+
+  useEffect(() => {
+    axios
+      .get("/api/movies")
+      .then(res => {
+        console.log("res.data", res.data)
+        setItems(res.data)
+      })
+      .catch(error => console.log(error));
+  }, []);
 
 
   const addToSavedList = movie => {
