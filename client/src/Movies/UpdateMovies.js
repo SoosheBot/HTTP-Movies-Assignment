@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 
 const defaultInfo = {
+  id: "",
   title: "",
   director: "",
   metascore: 0,
@@ -11,13 +12,17 @@ const defaultInfo = {
 
 const UpdateMovies = props => {
   const [movie, setMovie] = useState(defaultInfo);
-  const { id } = useParams();
+  //   const { id } = useParams();
 
   useEffect(() => {
-    const movieToEdit = props.movies.find(movie => `${movie.id}` === id);
+    const movieToEdit = props.items.find(movie => {
+      return `${movie.id}` === Number(props.match.params.id);
+    });
 
-    if (movieToEdit) setMovie(movieToEdit);
-  }, [props.movies, id]);
+    if (movieToEdit) {
+      setMovie(movieToEdit);
+    }
+  }, [props.items, props.match.params]);
 
   const handleChange = ev => {
     ev.persist();
@@ -83,7 +88,6 @@ const UpdateMovies = props => {
           value={movie.stars}
           placeholder="stars"
         />
-        
       </form>
     </div>
   );
