@@ -1,67 +1,97 @@
-import React, { useState} from 'react';
-import Axios from 'axios';
+import React, {useState, useEffect} from "react"
+import styled from 'styled-components';
 
-const UpdateMovie = props => {
+const Formm = styled.form`
+text-align: center
+`
 
-    const [movie, setMovie] = useState({id: props.match.params.id});
+const Header =styled.h1 `
+text-align: center
+`
 
-    const handleChange = e => {
+const initialItem = {
+    id: "",
+    title: "",
+    director: "",
+    metascore: "",
+    stars: []
+  };
 
-        setMovie({
-            ...movie,
-            [e.target.name]: e.target.value,
-        });
-        console.log(movie);
-    };
+const UpdateMovie = (props) => {
+ const [movieInfo, setMovieInfo] = useState({initialItem})
 
-    const handleSubmit = e => {
+ useEffect(() => {
+     console.log("props test", props.items)
+    const editingItem = props.items.find(thing => {
+      return thing.id === Number(props.match.params.id);
+    });
 
-        e.preventDefault();
+    if (editingItem) {
+      setMovieInfo(editingItem);
+    }
+  }, [props.items, props.match.params]);
 
-        const movieFormatter = {
-            ...movie,
-            stars: movie.stars.split(", "),
-        }
+  const changeHandler = ev => {
+    ev.persist();
+    let value = ev.target.value;
+   console.log(movieInfo)
+    setMovieInfo({
+      ...movieInfo,
+      [ev.target.name]: value
+    });
+  };
 
-        Axios.put(`http://localhost:5000/api/movies/${props.match.params.id}`, movieFormatter)
-        .then(reponse => {
-            console.log(reponse);
-            document.querySelector('form').reset();
-            props.history.push("/")
-        })
-        .catch( error => {
-            console.log(error);
-        });
+  const handleSubmit = e => {
+    e.preventDefault();
+    const id = Number(props.match.params.id);
+    props.updateItem(id, movieInfo);
 
-    };
+  };
 
-  return (
-    <div className="movie-card">
+    return (
+        <div>
+            <Header>Update Item</Header>
+            <Formm onSubmit={handleSubmit}>
+            <label>
+                Title: <input 
+                  type="text"
+                  name="title"
+                  onChange={changeHandler}
+                  value={movieInfo.title}
+                />
+                <br></br>
+            </label>
+            <label>
+                Director: <input 
+                  type="text"
+                  name="director"
+                  onChange={changeHandler}
+                  value={movieInfo.director}
+                />
+            </label>
+            <br></br>
+            <label>
+                MetaScore: <input 
+                  type="text"
+                  name="metascore"
+                  onChange={changeHandler}
+                  value={movieInfo.metascore}
+                />
+            </label>
+            <br></br>
+            <label>
+                stars: <input 
+                  type="text"
+                  name="stars"
+                  onChange={changeHandler}
+                  value={movieInfo.stars}
+                />
+            </label>
+            <br></br>
+            <button type="submit">Submit Changes</button>
+            </Formm>
+        </div>
+    )
+}
 
-        <p>Fill out the form here to update a movie, if adding more than one 
-            star, separate each one with a comma followed by a space.</p>
-
-        <form onSubmit={handleSubmit}>
-            <input
-            placeholder="Movie Name"
-            name="title"
-            onChange={handleChange}/>
-             <input
-            placeholder="Director"
-            name="director"
-            onChange={handleChange}/>
-             <input
-            placeholder="Metascore"
-            name="metascore"
-            onChange={handleChange}/>
-             <input
-            placeholder="Stars"
-            name="stars"
-            onChange={handleChange}/>
-            <button type="submit">Update</button>
-        </form>
-    </div>
-  );
-};
-
-export default UpdateMovie; 
+export default UpdateMovie;
